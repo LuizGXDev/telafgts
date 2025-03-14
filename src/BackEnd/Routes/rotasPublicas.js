@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import conexao from '../DB/conexao.js';
+import conexao from './conexao.js';
 
 const rota = express.Router();
 

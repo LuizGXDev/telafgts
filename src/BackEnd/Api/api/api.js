@@ -1,23 +1,19 @@
 import express from 'express';
-import cors from "cors";
+import cors from 'cors';
 import session from 'express-session';
 import mysqlSession from 'express-mysql-session';
-import rotasPublicas from '../Routes/rotasPublicas.js';
+import rotasPublicas from './rotasPublicas.js';
 
 const app = express();
 app.use(express.json());
 
-// Configuração do CORS - Permitir requisições do frontend
 app.use(cors({
-    origin: 'https://lightgrey-shark-932846.hostingersite.com', // Seu frontend
-    credentials: true, // Permitir cookies/sessões
+    origin: 'http://85.209.93.252:3000',
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const portRunning = 3000;
-
-// Criando a Store para MySQL
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore({
     host: 'localhost',
@@ -27,23 +23,21 @@ const sessionStore = new MySQLStore({
     database: 'fgtsnovo'
 });
 
-// Configuração da Sessão - Para manter o login do usuário
 app.use(session({
     secret: 'dakota@fgts',
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        secure: false,  // true se HTTPS
+        secure: false,
         httpOnly: true,
-        maxAge: 3600000 // Sessão dura 1 hora
+        maxAge: 3600000
     }
 }));
 
-// Usando as rotas públicas sem prefixo /api
 app.use('/admin', rotasPublicas);
 
-// Iniciar o Servidor
-app.listen(portRunning, () => {
-    console.log(`Servidor  rodando na porta ${portRunning}`);
-});
+// Exportação para o Vercel (serverless function)
+export default function(req, res) {
+    app(req, res); // Fazendo a ponte entre Express e a função serverless
+}

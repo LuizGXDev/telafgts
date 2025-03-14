@@ -16,14 +16,16 @@ const Dashboard = () => {
     useEffect(() => {
         const verificarAutenticacao = async () => {
             try {
-                const response = await axios.get("http://192.168.2.110:3000/admin/dashboard", { withCredentials: true });
+                // Usando URL completa para verificar a autenticação
+                const response = await axios.get("http://85.209.93.252:3000/admin/dashboard", { withCredentials: true });
 
                 if (response.status === 200) {
                     setAutenticado(true);
                     setMensagem(response.data.mensagem);
                     setUsuario(response.data.usuario);
 
-                    const dadosBancariosResponse = await axios.get("http://192.168.2.110:3000/admin/getinfos", { withCredentials: true });
+                    // Usando URL completa para obter dados bancários
+                    const dadosBancariosResponse = await axios.get("http://85.209.93.252:3000/admin/getinfos", { withCredentials: true });
                     if (dadosBancariosResponse.status === 200) {
                         setDados(dadosBancariosResponse.data.dados);  // Definindo os dados recebidos
                     }
@@ -46,8 +48,9 @@ const Dashboard = () => {
     // Função de logout
     const handleLogout = async () => {
         try {
+            // Usando URL completa para logout
             await axios.post(
-                "http://192.168.2.110:3000/admin/logout",  // Rota de logout no servidor
+                "http://85.209.93.252:3000/admin/logout",  // URL completa para logout
                 {},
                 { withCredentials: true }
             );
@@ -71,7 +74,7 @@ const Dashboard = () => {
             <div className={styles.container}>
                 <div className={styles.mensagemContainer}>
                     <p>{mensagem}</p>
-                    <button onClick={() => window.location.href = '/admin/login'}>Ir para o Login</button>
+                    <button onClick={() => navigate('/admin/login')}>Ir para o Login</button>  {/* Usando navegação do react-router */}
                 </div>
             </div>
         );

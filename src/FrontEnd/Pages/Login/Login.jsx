@@ -18,10 +18,8 @@ function Login() {
             return;
         }
 
-        
-
-        // URL da API, altere conforme o ambiente
-        const apiUrl = "https://lightgrey-shark-932846.hostingersite.com/admin/login"; // URL de produção
+        // URL completa da API
+        const apiUrl = "http://85.209.93.252:3000/admin/logina"; // URL completa com HTTP
 
         try {
             const response = await axios.post(
@@ -29,13 +27,14 @@ function Login() {
                 { usuario, senha },
                 { 
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true 
+                    withCredentials: true // Habilita cookies para autenticação
                 }
             );
 
             if (response.status === 200) {
                 setTipoMensagem("sucesso");
                 setMensagem("Login bem-sucedido! Redirecionando...");
+                // Aqui você pode redirecionar ou fazer outra ação ao fazer login
                 // window.location.href = '/admin/dashboard';
             }
         } catch (error) {
